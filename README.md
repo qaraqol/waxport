@@ -51,6 +51,7 @@ To set up and run Waxport locally, follow the steps below:
    cd waxport
    ```
 3. You need an API key from Pinax Token API and their URL in your .env file as
-   ```API_URL=https://wax.api.pinax.network/v1/account/transfers
-       API_KEY=XXXXXXXXXXXXXXX
+   ```
+        API_URL=https://wax.api.pinax.network/v1/account/transfers
+        API_KEY=XXXXXXXXXXXXXXX
    ```
