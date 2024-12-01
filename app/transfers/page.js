@@ -3,7 +3,6 @@ import { useState, useEffect, Suspense } from "react";
 import { Table, Button, Row, Col, Space, Typography, InputNumber } from "antd";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { Suspense } from "react";
 
 const { Title, Text } = Typography;
 
