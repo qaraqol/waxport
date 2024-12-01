@@ -1,6 +1,5 @@
-"use server";
 import { NextResponse } from "next/server";
-
+export const dynamic = "force-dynamic";
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -20,6 +19,7 @@ export async function GET(request) {
       throw new Error("Invalid page range. Pages must be between 1 and 30.");
     }
 
+    console.log(`Fetching Pages ${startPage} - ${endPage}`);
     let allData = [];
     for (let page = startPage; page <= endPage; page++) {
       const query = new URLSearchParams({
@@ -27,8 +27,6 @@ export async function GET(request) {
         page,
         limit: 50, // Fixed page size
       }).toString();
-
-      console.log(`Fetching Page ${page}: ${process.env.API_URL}?${query}`);
 
       const response = await fetch(`${process.env.API_URL}?${query}`, {
         headers: {
