@@ -1,12 +1,21 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
-import { Table, Button, Row, Col, Space, Typography, InputNumber } from "antd";
+import { useState, useEffect } from "react";
+import {
+  Table,
+  Button,
+  Row,
+  Col,
+  Space,
+  Typography,
+  InputNumber,
+  Spin,
+} from "antd";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 const { Title, Text } = Typography;
 
-const TransfersContent = () => {
+const TransfersPage = () => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -119,134 +128,126 @@ const TransfersContent = () => {
   };
 
   return (
-    <Suspense
-      fallback={
-        <div style={{ textAlign: "center", padding: "50px" }}>
-          <Spin indicator={antIcon} tip="Loading your data..." size="large" />
-        </div>
-      }
-    >
-      <div style={{ padding: "24px", width: "75vw" }}>
-        <Row
-          justify="space-between"
-          align="middle"
-          style={{ marginBottom: "16px" }}
-        >
+    <div style={{ padding: "24px", width: "75vw" }}>
+      <Row
+        justify="space-between"
+        align="middle"
+        style={{ marginBottom: "16px" }}
+      >
+        <Col>
+          <Title level={1}>
+            Transfers for {params.account || "Unknown Account"}
+          </Title>
+        </Col>
+        <Col>
+          <Space direction="horizontal">
+            <InputNumber
+              addonBefore="Starting Page"
+              min={1}
+              max={totalPages}
+              value={range[0]}
+              onChange={handleStartPageChange}
+              disabled={apiError}
+              placeholder="Start Page"
+            />
+            <InputNumber
+              addonBefore="Ending Page"
+              min={range[0]}
+              max={Math.min(range[0] + 30, totalPages)}
+              value={range[1]}
+              onChange={handleEndPageChange}
+              disabled={apiError}
+              placeholder="End Page"
+            />
+            <Button
+              type="primary"
+              onClick={handleDownloadCSV}
+              disabled={apiError}
+            >
+              Download CSV
+            </Button>
+          </Space>
+        </Col>
+      </Row>
+
+      {apiError && (
+        <Row style={{ marginBottom: "16px" }}>
           <Col>
-            <Title level={1}>
-              Transfers for {params.account || "Unknown Account"}
-            </Title>
-          </Col>
-          <Col>
-            <Space direction="horizontal">
-              <InputNumber
-                addonBefore="Starting Page"
-                min={1}
-                max={totalPages}
-                value={range[0]}
-                onChange={handleStartPageChange}
-                disabled={apiError}
-                placeholder="Start Page"
-              />
-              <InputNumber
-                addonBefore="Ending Page"
-                min={range[0]}
-                max={Math.min(range[0] + 30, totalPages)}
-                value={range[1]}
-                onChange={handleEndPageChange}
-                disabled={apiError}
-                placeholder="End Page"
-              />
-              <Button
-                type="primary"
-                onClick={handleDownloadCSV}
-                disabled={apiError}
-              >
-                Download CSV
-              </Button>
-            </Space>
+            <Text
+              type="danger"
+              style={{ fontSize: "16px", fontWeight: "bold" }}
+            >
+              API Error or Invalid Account
+            </Text>
           </Col>
         </Row>
+      )}
 
-        {apiError && (
-          <Row style={{ marginBottom: "16px" }}>
-            <Col>
-              <Text
-                type="danger"
-                style={{ fontSize: "16px", fontWeight: "bold" }}
+      {!apiError && (
+        <Row justify="start" style={{ marginBottom: "16px" }}>
+          <Col>
+            <Text strong style={{ fontSize: "16px" }}>
+              Total Pages: {totalPages} (Max Downloadable: 30)
+            </Text>
+          </Col>
+        </Row>
+      )}
+
+      <Table
+        columns={[
+          {
+            title: "#",
+            key: "index",
+            render: (_, __, index) =>
+              (pagination.current - 1) * pagination.pageSize + index + 1,
+          },
+          {
+            title: "Transaction ID",
+            key: "trx_id",
+            dataIndex: "trx_id",
+            render: (trx) => (
+              <a
+                href={`https://waxblock.io/transaction/${trx}`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                API Error or Invalid Account
-              </Text>
-            </Col>
-          </Row>
-        )}
-
-        {!apiError && (
-          <Row justify="start" style={{ marginBottom: "16px" }}>
-            <Col>
-              <Text strong style={{ fontSize: "16px" }}>
-                Total Pages: {totalPages} (Max Downloadable: 30)
-              </Text>
-            </Col>
-          </Row>
-        )}
-
-        <Table
-          columns={[
-            {
-              title: "#",
-              key: "index",
-              render: (_, __, index) =>
-                (pagination.current - 1) * pagination.pageSize + index + 1,
+                {trx.slice(0, 5)}...
+              </a>
+            ),
+          },
+          { title: "From", dataIndex: "from", key: "from" },
+          { title: "To", dataIndex: "to", key: "to" },
+          { title: "Token", dataIndex: "symcode", key: "symcode" },
+          {
+            title: "Quantity",
+            dataIndex: "quantity",
+            key: "quantity",
+            render: (quantity) => {
+              const [integer, decimal] = quantity.split(".");
+              return decimal ? `${integer}.${decimal.slice(0, 2)}` : integer;
             },
-            {
-              title: "Transaction ID",
-              key: "trx_id",
-              dataIndex: "trx_id",
-              render: (trx) => (
-                <a
-                  href={`https://waxblock.io/transaction/${trx}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {trx.slice(0, 5)}...
-                </a>
-              ),
-            },
-            { title: "From", dataIndex: "from", key: "from" },
-            { title: "To", dataIndex: "to", key: "to" },
-            { title: "Token", dataIndex: "symcode", key: "symcode" },
-            {
-              title: "Quantity",
-              dataIndex: "quantity",
-              key: "quantity",
-              render: (quantity) => {
-                const [integer, decimal] = quantity.split(".");
-                return decimal ? `${integer}.${decimal.slice(0, 2)}` : integer;
-              },
-            },
-            { title: "Memo", dataIndex: "memo", key: "memo" },
-            {
-              title: "Time",
-              dataIndex: "timestamp",
-              key: "timestamp",
-              render: (text) => new Date(text).toLocaleString(),
-            },
-          ]}
-          dataSource={data}
-          rowKey={(record) => `${record.trx_id}-${record.action_index}`}
-          loading={loading}
-          pagination={{
-            current: pagination.current,
-            pageSize: pagination.pageSize,
-            total: pagination.total,
-            showSizeChanger: false,
-          }}
-          onChange={handleTableChange}
-        />
-      </div>
-    </Suspense>
+          },
+          { title: "Memo", dataIndex: "memo", key: "memo" },
+          {
+            title: "Time",
+            dataIndex: "timestamp",
+            key: "timestamp",
+            render: (text) => new Date(text).toLocaleString(),
+          },
+        ]}
+        dataSource={data}
+        rowKey={(record) => `${record.trx_id}-${record.action_index}`}
+        loading={loading}
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          showSizeChanger: false,
+        }}
+        onChange={handleTableChange}
+      />
+    </div>
   );
 };
 
-export default TransfersContent;
+export default TransfersPage;

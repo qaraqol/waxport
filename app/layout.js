@@ -4,6 +4,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Layout } from "antd";
 import Navigation from "@/components/Navigation"; // Import the Navigation component
 import HeaderComponent from "@/components/HeaderComponent";
+import { Suspense } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,15 +28,27 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" />
-      </head>{" "}
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <AntdRegistry>
-          <Layout style={{ minHeight: "100vh", alignItems: "center" }}>
-            <HeaderComponent />
-            <Navigation />
-            {children}
-          </Layout>
-        </AntdRegistry>
+        <Suspense
+          fallback={
+            <div style={{ textAlign: "center", padding: "50px" }}>
+              <Spin
+                indicator={antIcon}
+                tip="Loading your data..."
+                size="large"
+              />
+            </div>
+          }
+        >
+          <AntdRegistry>
+            <Layout style={{ minHeight: "100vh", alignItems: "center" }}>
+              <HeaderComponent />
+              <Navigation />
+              {children}
+            </Layout>
+          </AntdRegistry>
+        </Suspense>
       </body>
     </html>
   );
