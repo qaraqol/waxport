@@ -7,6 +7,10 @@
     "start": "next start -H 0.0.0.0 -p 5000",
     "lint": "next lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qaraqol/waxport"
+  },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.2",
     "antd": "^5.22.2",
