@@ -14,6 +14,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 
 const { Title, Text } = Typography;
+const maxDownloads = process.env.NEXT_PUBLIC_MAX_DOWNLOADS;
 
 const TransfersPage = () => {
   const router = useRouter();
@@ -28,7 +29,6 @@ const TransfersPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [apiError, setApiError] = useState(false);
   const [range, setRange] = useState([1, 2]);
-  const maxDownloads = process.env.maxDownloads;
   // Parse and prepare search parameters
   const params = {};
   searchParams.forEach((value, key) => {

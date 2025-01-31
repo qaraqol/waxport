@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const maxDownloads = process.env.maxDownloads;
+    const maxDownloads = process.env.NEXT_PUBLIC_MAX_DOWNLOADS;
     const account = searchParams.get("account");
     const startPage = parseInt(searchParams.get("startPage"), 10) || 1;
     const endPage = Math.min(
