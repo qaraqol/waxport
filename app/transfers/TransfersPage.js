@@ -28,7 +28,7 @@ const TransfersPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [apiError, setApiError] = useState(false);
   const [range, setRange] = useState([1, 2]);
-
+  const maxDownloads = 100;
   // Parse and prepare search parameters
   const params = {};
   searchParams.forEach((value, key) => {
@@ -125,7 +125,7 @@ const TransfersPage = () => {
     if (
       range[0] < 1 ||
       range[1] < range[0] ||
-      range[1] > Math.min(totalPages, 100)
+      range[1] > Math.min(totalPages, maxDownloads)
     ) {
       alert("Invalid page range selected. Please try again.");
       return;
@@ -171,7 +171,7 @@ const TransfersPage = () => {
             <InputNumber
               addonBefore="Ending Page"
               min={range[0]}
-              max={Math.min(range[0] + 30, totalPages)}
+              max={Math.min(range[0] + maxDownloads, totalPages)}
               value={range[1]}
               onChange={handleEndPageChange}
               disabled={apiError}
@@ -203,7 +203,7 @@ const TransfersPage = () => {
         <Row justify="start" style={{ marginBottom: "16px" }}>
           <Col>
             <Text strong style={{ fontSize: "16px" }}>
-              Total Pages: {totalPages} (Max Downloadable: 30)
+              Total Pages: {totalPages} (Max Downloadable: {maxDownloads})
             </Text>
           </Col>
         </Row>
