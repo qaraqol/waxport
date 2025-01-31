@@ -15,7 +15,7 @@ export async function GET(request) {
       throw new Error("Account parameter is required.");
     }
 
-    if (startPage < 1 || endPage > 30 || startPage > endPage) {
+    if (startPage < 1 || endPage > 100 || startPage > endPage) {
       throw new Error("Invalid page range. Pages must be between 1 and 30.");
     }
 

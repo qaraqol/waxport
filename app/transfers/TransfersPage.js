@@ -125,7 +125,7 @@ const TransfersPage = () => {
     if (
       range[0] < 1 ||
       range[1] < range[0] ||
-      range[1] > Math.min(totalPages, 30)
+      range[1] > Math.min(totalPages, 100)
     ) {
       alert("Invalid page range selected. Please try again.");
       return;
