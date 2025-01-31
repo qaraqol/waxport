@@ -21,7 +21,9 @@ export async function GET(request) {
       );
     }
     let response;
-    console.log(`Fetching Pages ${startPage} - ${endPage}`);
+    console.log(
+      `Fetching Pages ${startPage} - ${endPage} for ${account} account.`
+    );
     let allData = [];
     for (let page = startPage; page <= endPage; page++) {
       const query = new URLSearchParams({
