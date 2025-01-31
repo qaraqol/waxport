@@ -56,7 +56,7 @@ const TransfersPage = () => {
     if (value === null) return;
     const endPage = Math.max(
       range[0],
-      Math.min(value, range[0] + 39, totalPages)
+      Math.min(value, range[0] + maxDownloads - 1, totalPages)
     );
     if (endPage < range[0]) {
       return;
