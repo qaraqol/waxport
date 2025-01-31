@@ -103,7 +103,7 @@ const TransfersPage = () => {
         total: totalResults,
       }));
       setTotalPages(totalPages);
-      setRange([1, Math.min(totalPages, 30)]);
+      setRange([1, Math.min(totalPages, maxDownloads)]);
     } catch (error) {
       console.error("Error fetching data:", error);
       setApiError(true);
