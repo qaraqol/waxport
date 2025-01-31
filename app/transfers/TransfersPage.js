@@ -45,7 +45,7 @@ const TransfersPage = () => {
     const startPage = Math.max(1, Math.min(value, totalPages));
     const endPage = Math.min(
       Math.max(range[1], startPage),
-      startPage + 39,
+      startPage + maxDownloads - 1,
       totalPages
     );
     setRange([startPage, endPage]);
