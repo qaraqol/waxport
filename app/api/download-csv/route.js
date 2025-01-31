@@ -3,20 +3,22 @@ export const dynamic = "force-dynamic";
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-
+    const maxDownloads = 100;
     const account = searchParams.get("account");
     const startPage = parseInt(searchParams.get("startPage"), 10) || 1;
     const endPage = Math.min(
       parseInt(searchParams.get("endPage"), 10) || 1,
-      30
+      maxDownloads
     );
 
     if (!account) {
       throw new Error("Account parameter is required.");
     }
 
-    if (startPage < 1 || endPage > 100 || startPage > endPage) {
-      throw new Error("Invalid page range. Pages must be between 1 and 30.");
+    if (startPage < 1 || endPage > maxDownloads || startPage > endPage) {
+      throw new Error(
+        "Invalid page range. Pages must be between 1 and " + maxDownloads + "."
+      );
     }
 
     console.log(`Fetching Pages ${startPage} - ${endPage}`);
