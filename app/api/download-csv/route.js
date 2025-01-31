@@ -27,12 +27,15 @@ export async function GET(request) {
         page,
         limit: 50, // Fixed page size
       }).toString();
-
-      const response = await fetch(`${process.env.API_URL}?${query}`, {
-        headers: {
-          "X-Api-Key": process.env.API_KEY,
-        },
-      });
+      if (process.env.API_KEY) {
+        const response = await fetch(`${process.env.API_URL}?${query}`, {
+          headers: {
+            "X-Api-Key": process.env.API_KEY,
+          },
+        });
+      } else {
+        const response = await fetch(`${process.env.API_URL}?${query}`);
+      }
 
       if (!response.ok) {
         const errorMessage = await response.text();
