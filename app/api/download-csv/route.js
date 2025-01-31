@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const maxDownloads = 100;
+    const maxDownloads = process.env.maxDownloads;
     const account = searchParams.get("account");
     const startPage = parseInt(searchParams.get("startPage"), 10) || 1;
     const endPage = Math.min(
@@ -20,7 +20,7 @@ export async function GET(request) {
         "Invalid page range. Pages must be between 1 and " + maxDownloads + "."
       );
     }
-
+    let response;
     console.log(`Fetching Pages ${startPage} - ${endPage}`);
     let allData = [];
     for (let page = startPage; page <= endPage; page++) {
@@ -30,15 +30,18 @@ export async function GET(request) {
         limit: 50, // Fixed page size
       }).toString();
       if (process.env.API_KEY) {
-        const response = await fetch(`${process.env.API_URL}?${query}`, {
+        response = await fetch(`${process.env.API_URL}?${query}`, {
           headers: {
             "X-Api-Key": process.env.API_KEY,
           },
         });
       } else {
-        const response = await fetch(`${process.env.API_URL}?${query}`);
+        try {
+          response = await fetch(`${process.env.API_URL}?${query}`);
+        } catch (e) {
+          console.log(e);
+        }
       }
-
       if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(`Failed to fetch data (Page ${page}): ${errorMessage}`);

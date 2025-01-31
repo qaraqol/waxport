@@ -28,7 +28,7 @@ const TransfersPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [apiError, setApiError] = useState(false);
   const [range, setRange] = useState([1, 2]);
-  const maxDownloads = 100;
+  const maxDownloads = process.env.maxDownloads;
   // Parse and prepare search parameters
   const params = {};
   searchParams.forEach((value, key) => {
