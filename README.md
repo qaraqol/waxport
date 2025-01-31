@@ -50,8 +50,12 @@ To set up and run Waxport locally, follow the steps below:
    git clone https://github.com/your-username/waxport.git
    cd waxport
    ```
-3. You need an API key from Pinax Token API and their URL in your .env file as
+3. You can use Qaraqol's Token API without an API key or use Pinax Token API
+   You need an API key from Pinax Token API and their URL in your .env file
+   You also need to specify the download limit for token amount.
    ```
-        API_URL=https://wax.api.pinax.network/v1/account/transfers
+        API_URL=https://wax.api.pinax.network/v1/account/transfers //For Pinax
+        API_URL=https://wax-token.qaraqol.com/account/transfers //For Qaraqol
         API_KEY=XXXXXXXXXXXXXXX
+        NEXT_PUBLIC_MAX_DOWNLOADS=100
    ```
